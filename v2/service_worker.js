@@ -43,13 +43,17 @@ self.addEventListener('fetch', e => {
     // fetch(e.request).catch(() => caches.match(e.request))
     fetch(e.request)
       .then(res => {
+        console.log(e.request);
         // make copy of response
         const resClone = res.clone();
         // open cache
         caches.open(cacheName)
           .then(cache => {
-            // add the response to the cache
-            cache.put(e.request, resClone);
+            // check the request is from http or not
+            if(e.request.url.startsWith('http')){
+              // add the response to the cache
+              cache.put(e.request, resClone);
+            }
           });
         return res;
       })
